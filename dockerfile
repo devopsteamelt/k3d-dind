@@ -1,5 +1,5 @@
-# docker build -t zeevb053/k3d-dind:1.3 .
-# docker run --privileged -d -it --name k3d zeevb053/k3d-dind:1.3
+# docker build -t zeevb053/k3d-dind:1.4 .
+# docker run --privileged -d -it --name k3d zeevb053/k3d-dind:1.4
 # docker exec -it k3d bash
 
 FROM docker:28.5-dind
@@ -12,7 +12,7 @@ RUN apk update && apk add --no-cache \
     curl \
     sudo \
     python3 \
-    pip \
+    py3-pip \
     iputils \
     tcpdump \
     helm \
@@ -108,4 +108,3 @@ echo
 # USER dockeruser
 # WORKDIR /home/dockeruser
 ENTRYPOINT ["dockerd-entrypoint.sh"]
-
