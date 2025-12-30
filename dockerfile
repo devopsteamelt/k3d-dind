@@ -12,6 +12,7 @@ RUN apk update && apk add --no-cache \
     curl \
     sudo \
     python3 \
+    pip \
     iputils \
     tcpdump \
     helm \
@@ -23,22 +24,35 @@ RUN apk update && apk add --no-cache \
     zip \
     mount \
     jq \
-    && rm -rf /var/cache/apk/*  && \
-    cat /usr/bin/kubectl | base64 > /usr/bin/kubectl-base && rm /usr/bin/kubectl && \
-    cat /usr/bin/helm | base64 > /usr/bin/helm-base  && rm /usr/bin/helm
+    yq \
+    && rm -rf /var/cache/apk/*  
+    # && \
+    # cat /usr/bin/kubectl | base64 > /usr/bin/kubectl-base && rm /usr/bin/kubectl && \
+    # cat /usr/bin/helm | base64 > /usr/bin/helm-base  && rm /usr/bin/helm
 
 # Enable Docker daemon inside container
 # RUN mkdir -p /var/lib/docker
 
 # Install k3d
-RUN wget -q -O - https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash && \
-    cat /usr/local/bin/k3d | base64 > /usr/local/bin/k3d-base && rm /usr/local/bin/k3d
+RUN wget -q -O - https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash 
+    # && \
+    # cat /usr/local/bin/k3d | base64 > /usr/local/bin/k3d-base && rm /usr/local/bin/k3d
+
 
 # ---- Install Helmify ----
 RUN curl -L https://github.com/arttor/helmify/releases/latest/download/helmify_Linux_x86_64.tar.gz \
-    | tar -xz -C /usr/local/bin && chmod +x /usr/local/bin/helmify && \
-    cat /usr/local/bin/helmify | base64 > /usr/local/bin/helmify-base && rm /usr/local/bin/helmify
+    | tar -xz -C /usr/local/bin && chmod +x /usr/local/bin/helmify 
+    # && \
+    # cat /usr/local/bin/helmify | base64 > /usr/local/bin/helmify-base && rm /usr/local/bin/helmify
 
+
+# ---- Install jfrog cli ----
+RUN curl -fL https://install-cli.jfrog.io | sh 
+
+
+# ---- Install rancher cli ----
+RUN curl -L https://github.com/rancher/cli/releases/download/v2.13.1/rancher-linux-amd64-v2.13.1.tar.gz \
+    | tar -xz -C /usr/local/bin 
     
     
 
@@ -68,12 +82,13 @@ skopeo copy docker://ghcr.io/k3d-io/k3d-proxy:5.8.3 docker-archive:/temp/k3d-pro
 skopeo copy docker://ghcr.io/k3d-io/k3d-tools:5.8.3 docker-archive:/temp/k3d-tools-5.8.3.tar:ghcr.io/k3d-io/k3d-tools:5.8.3  && \
 skopeo copy docker://rancher/k3s:v1.31.5-k3s1 docker-archive:/temp/k3s-v1.31.5-k3s1.tar:rancher/k3s:v1.31.5-k3s1  && \
 skopeo copy docker://registry:3.0.0 docker-archive:/temp/registry-3.0.0.tar:registry:3.0.0   && \
-echo  && \
-cat /temp/k3d-proxy-5.8.3.tar | base64 > /temp/k3d-proxy-5.8.3--base  && \
-cat /temp/k3d-tools-5.8.3.tar | base64 > /temp/k3d-tools-5.8.3--base   && \
-cat /temp/k3s-v1.31.5-k3s1.tar | base64 > /temp/k3s-v1.31.5-k3s1--base   && \
-cat /temp/registry-3.0.0.tar | base64 > /temp/registry-3.0.0--base  && \
-rm -f /temp/k3d-proxy-5.8.3.tar /temp/k3d-tools-5.8.3.tar /temp/k3s-v1.31.5-k3s1.tar /temp/registry-3.0.0.tar
+echo  
+# && \
+# cat /temp/k3d-proxy-5.8.3.tar | base64 > /temp/k3d-proxy-5.8.3--base  && \
+# cat /temp/k3d-tools-5.8.3.tar | base64 > /temp/k3d-tools-5.8.3--base   && \
+# cat /temp/k3s-v1.31.5-k3s1.tar | base64 > /temp/k3s-v1.31.5-k3s1--base   && \
+# cat /temp/registry-3.0.0.tar | base64 > /temp/registry-3.0.0--base  && \
+# rm -f /temp/k3d-proxy-5.8.3.tar /temp/k3d-tools-5.8.3.tar /temp/k3s-v1.31.5-k3s1.tar /temp/registry-3.0.0.tar
 
 
 # docker pull ghcr.io/k3d-io/k3d-proxy:5.8.3 && \
