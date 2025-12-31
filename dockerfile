@@ -74,15 +74,15 @@ RUN flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/f
 RUN adduser -D dockeruser && echo "dockeruser ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 
-RUN dockerd & \
-sleep 5 && \
-echo ---- pull k3d images ---- && \
-mkdir /temp  && \
-skopeo copy docker://ghcr.io/k3d-io/k3d-proxy:5.8.3 docker-archive:/temp/k3d-proxy-5.8.3.tar:ghcr.io/k3d-io/k3d-proxy:5.8.3  && \
-skopeo copy docker://ghcr.io/k3d-io/k3d-tools:5.8.3 docker-archive:/temp/k3d-tools-5.8.3.tar:ghcr.io/k3d-io/k3d-tools:5.8.3  && \
-skopeo copy docker://rancher/k3s:v1.31.5-k3s1 docker-archive:/temp/k3s-v1.31.5-k3s1.tar:rancher/k3s:v1.31.5-k3s1  && \
-skopeo copy docker://registry:3.0.0 docker-archive:/temp/registry-3.0.0.tar:registry:3.0.0   && \
-echo  
+# RUN dockerd & \
+# sleep 5 && \
+# echo ---- pull k3d images ---- && \
+# mkdir /temp  && \
+# skopeo copy docker://ghcr.io/k3d-io/k3d-proxy:5.8.3 docker-archive:/temp/k3d-proxy-5.8.3.tar:ghcr.io/k3d-io/k3d-proxy:5.8.3  && \
+# skopeo copy docker://ghcr.io/k3d-io/k3d-tools:5.8.3 docker-archive:/temp/k3d-tools-5.8.3.tar:ghcr.io/k3d-io/k3d-tools:5.8.3  && \
+# skopeo copy docker://rancher/k3s:v1.31.5-k3s1 docker-archive:/temp/k3s-v1.31.5-k3s1.tar:rancher/k3s:v1.31.5-k3s1  && \
+# skopeo copy docker://registry:3.0.0 docker-archive:/temp/registry-3.0.0.tar:registry:3.0.0   && \
+# echo  
 # && \
 # cat /temp/k3d-proxy-5.8.3.tar | base64 > /temp/k3d-proxy-5.8.3--base  && \
 # cat /temp/k3d-tools-5.8.3.tar | base64 > /temp/k3d-tools-5.8.3--base   && \
