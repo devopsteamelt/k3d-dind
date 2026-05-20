@@ -28,6 +28,7 @@ RUN apk add --no-cache \
 
 # Install kubeseal and kubeseal-convert manually from GitHub releases
 # Install kubeseal and kubeseal-convert manually from GitHub releases
+# Install kubeseal and kubeseal-convert manually from GitHub releases
 RUN KUBESEAL_VERSION="0.26.0" && \
     CONVERT_VERSION="0.1.3" && \
     ARCH=$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/') && \
