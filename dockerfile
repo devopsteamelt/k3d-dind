@@ -4,8 +4,8 @@
 
 FROM docker:28.5-dind
 
-# Install base tools
-RUN apk update && apk add --no-cache \
+
+RUN apk add --no-cache \
     git \
     bash \
     tcsh \
@@ -24,21 +24,14 @@ RUN apk update && apk add --no-cache \
     zip \
     mount \
     jq \
-    yq \
-    && rm -rf /var/cache/apk/*  
-    # && \
-    # cat /usr/bin/kubectl | base64 > /usr/bin/kubectl-base && rm /usr/bin/kubectl && \
-    # cat /usr/bin/helm | base64 > /usr/bin/helm-base  && rm /usr/bin/helm
+    yq
 
-# Enable Docker daemon inside container
-# RUN mkdir -p /var/lib/docker
 # Install kubeseal manually from GitHub releases
 RUN KUBESEAL_VERSION="0.26.0" && \
     ARCH=$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/') && \
     curl -L "https://github.com/codecentric/kubeseal-convert/releases/download/v${KUBESEAL_VERSION}/kubeseal-convert-${KUBESEAL_VERSION}-linux-${ARCH}.tar.gz" | tar -xz -C /usr/local/bin/ kubeseal-convert && \
     curl -L "https://github.com/bitnami-labs/sealed-secrets/releases/download/v${KUBESEAL_VERSION}/kubeseal-${KUBESEAL_VERSION}-linux-${ARCH}.tar.gz" | tar -xz -C /usr/local/bin/ kubeseal && \
     chmod +x /usr/local/bin/kubeseal /usr/local/bin/kubeseal-convert
-
 # Install k3d
 RUN wget -q -O - https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash 
     # && \
