@@ -27,19 +27,22 @@ RUN apk add --no-cache \
     yq
 
 # Install kubeseal and kubeseal-convert manually from GitHub releases
+# Install kubeseal and kubeseal-convert manually from GitHub releases
 RUN KUBESEAL_VERSION="0.26.0" && \
     CONVERT_VERSION="0.1.3" && \
     ARCH=$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/') && \
     \
-    # Download and extract kubeseal-convert (using its correct version)
-    curl -fL "https://github.com/codecentric/kubeseal-convert/releases/download/v${CONVERT_VERSION}/kubeseal-convert-${CONVERT_VERSION}-linux-${ARCH}.tar.gz" -o /tmp/kubeseal-convert.tar.gz && \
+    # 1. Download and extract kubeseal-convert
+    # URL structure for codecentric: kubeseal-convert-amd64.tar.gz
+    curl -fL "https://github.com/codecentric/kubeseal-convert/releases/download/v${CONVERT_VERSION}/kubeseal-convert-${ARCH}.tar.gz" -o /tmp/kubeseal-convert.tar.gz && \
     tar -xzf /tmp/kubeseal-convert.tar.gz -C /usr/local/bin/ kubeseal-convert && \
     \
-    # Download and extract kubeseal
+    # 2. Download and extract kubeseal (Bitnami)
+    # URL structure for bitnami: kubeseal-0.26.0-linux-amd64.tar.gz
     curl -fL "https://github.com/bitnami-labs/sealed-secrets/releases/download/v${KUBESEAL_VERSION}/kubeseal-${KUBESEAL_VERSION}-linux-${ARCH}.tar.gz" -o /tmp/kubeseal.tar.gz && \
     tar -xzf /tmp/kubeseal.tar.gz -C /usr/local/bin/ kubeseal && \
     \
-    # Set permissions and cleanup
+    # 3. Set permissions and cleanup
     chmod +x /usr/local/bin/kubeseal /usr/local/bin/kubeseal-convert && \
     rm -f /tmp/kubeseal-convert.tar.gz /tmp/kubeseal.tar.gz
 # Install k3d
