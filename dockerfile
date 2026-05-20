@@ -25,6 +25,7 @@ RUN apk update && apk add --no-cache \
     mount \
     jq \
     yq \
+    kubeseal \
     && rm -rf /var/cache/apk/*  
     # && \
     # cat /usr/bin/kubectl | base64 > /usr/bin/kubectl-base && rm /usr/bin/kubectl && \
