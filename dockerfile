@@ -4,7 +4,7 @@
 
 FROM docker:28.5-dind
 
-
+# Install base tools
 RUN apk add --no-cache \
     git \
     bash \
@@ -22,7 +22,7 @@ RUN apk add --no-cache \
     wget \
     skopeo \
     zip \
-    mount \
+    util-linux \
     jq \
     yq
 
@@ -32,11 +32,11 @@ RUN KUBESEAL_VERSION="0.26.0" && \
     curl -L "https://github.com/codecentric/kubeseal-convert/releases/download/v${KUBESEAL_VERSION}/kubeseal-convert-${KUBESEAL_VERSION}-linux-${ARCH}.tar.gz" | tar -xz -C /usr/local/bin/ kubeseal-convert && \
     curl -L "https://github.com/bitnami-labs/sealed-secrets/releases/download/v${KUBESEAL_VERSION}/kubeseal-${KUBESEAL_VERSION}-linux-${ARCH}.tar.gz" | tar -xz -C /usr/local/bin/ kubeseal && \
     chmod +x /usr/local/bin/kubeseal /usr/local/bin/kubeseal-convert
+
 # Install k3d
 RUN wget -q -O - https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash 
     # && \
     # cat /usr/local/bin/k3d | base64 > /usr/local/bin/k3d-base && rm /usr/local/bin/k3d
-
 
 # ---- Install Helmify ----
 RUN curl -L https://github.com/arttor/helmify/releases/latest/download/helmify_Linux_x86_64.tar.gz \
@@ -44,16 +44,15 @@ RUN curl -L https://github.com/arttor/helmify/releases/latest/download/helmify_L
     # && \
     # cat /usr/local/bin/helmify | base64 > /usr/local/bin/helmify-base && rm /usr/local/bin/helmify
 
-
 # ---- Install jfrog cli ----
 RUN curl -fL https://install-cli.jfrog.io | sh 
 
-
 # ---- Install rancher cli ----
 RUN curl -L https://github.com/rancher/cli/releases/download/v2.13.1/rancher-linux-amd64-v2.13.1.tar.gz \
-    | tar -xz -C /usr/local/bin 
-    
-    
+    | tar -xz -C /tmp && \
+    mv /tmp/rancher-v2.13.1/rancher /usr/local/bin/rancher && \
+    chmod +x /usr/local/bin/rancher && \
+    rm -rf /tmp/rancher-*
 
 # ---- Install Kustomize ----
 # RUN curl -s "https://api.github.com/repos/kubernetes-sigs/kustomize/releases/latest" \
@@ -66,12 +65,11 @@ RUN curl -L https://github.com/rancher/cli/releases/download/v2.13.1/rancher-lin
 #     && rm -f /tmp/kustomize.tar.gz
 
 # Configure Flatpak and install K3x
-RUN flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo && \
-    flatpak install --user -y flathub com.github.inercia.k3x
+RUN flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo && \
+    flatpak install -y flathub com.github.inercia.k3x
 
 # Create non-root user for Flatpak
 RUN adduser -D dockeruser && echo "dockeruser ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-
 
 # RUN dockerd & \
 # sleep 5 && \
@@ -89,7 +87,6 @@ RUN adduser -D dockeruser && echo "dockeruser ALL=(ALL) NOPASSWD: ALL" >> /etc/s
 # cat /temp/registry-3.0.0.tar | base64 > /temp/registry-3.0.0--base  && \
 # rm -f /temp/k3d-proxy-5.8.3.tar /temp/k3d-tools-5.8.3.tar /temp/k3s-v1.31.5-k3s1.tar /temp/registry-3.0.0.tar
 
-
 # docker pull ghcr.io/k3d-io/k3d-proxy:5.8.3 && \
 # docker pull ghcr.io/k3d-io/k3d-tools:5.8.3 && \
 # docker pull rancher/k3s:v1.31.5-k3s1 && \
@@ -102,7 +99,7 @@ RUN adduser -D dockeruser && echo "dockeruser ALL=(ALL) NOPASSWD: ALL" >> /etc/s
 # k3d kubeconfig get mycluster > ~/.kube/config && \
 # kubectl get nodes && \
 # echo '✅ K3d cluster ready. Helmify, Kustomize, Helm, and Kubectl are installed.' && \
-# echo 'Use: xvfb-run -a flatpak run --user com.github.inercia.k3x  to open K3x GUI.'
+# echo 'Use: xvfb-run -a flatpak run com.github.inercia.k3x to open K3x GUI.'
 
 # USER dockeruser
 # WORKDIR /home/dockeruser
