@@ -27,12 +27,33 @@ RUN apk add --no-cache \
     yq
 
 # Install kubeseal manually from GitHub releases
-RUN KUBESEAL_VERSION="0.26.0" && \
+# Install kubeseal manually from GitHub releases (with Debugging)
+RUN set -x && \
+    KUBESEAL_VERSION="0.26.0" && \
     ARCH=$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/') && \
-    curl -L "https://github.com/codecentric/kubeseal-convert/releases/download/v${KUBESEAL_VERSION}/kubeseal-convert-${KUBESEAL_VERSION}-linux-${ARCH}.tar.gz" | tar -xz -C /usr/local/bin/ kubeseal-convert && \
-    curl -L "https://github.com/bitnami-labs/sealed-secrets/releases/download/v${KUBESEAL_VERSION}/kubeseal-${KUBESEAL_VERSION}-linux-${ARCH}.tar.gz" | tar -xz -C /usr/local/bin/ kubeseal && \
-    chmod +x /usr/local/bin/kubeseal /usr/local/bin/kubeseal-convert
-
+    echo "=== DEBUG: Detected Architecture is: ${ARCH} ===" && \
+    echo "=== DEBUG: Target Kubeseal Version is: ${KUBESEAL_VERSION} ===" && \
+    \
+    echo "=== DEBUG: Downloading kubeseal-convert ===" && \
+    CONVERT_URL="https://github.com/codecentric/kubeseal-convert/releases/download/v${KUBESEAL_VERSION}/kubeseal-convert-${KUBESEAL_VERSION}-linux-${ARCH}.tar.gz" && \
+    echo "=== DEBUG: URL is ${CONVERT_URL} ===" && \
+    curl -fL "${CONVERT_URL}" -o /tmp/kubeseal-convert.tar.gz && \
+    \
+    echo "=== DEBUG: Extracting kubeseal-convert ===" && \
+    tar -xzf /tmp/kubeseal-convert.tar.gz -C /usr/local/bin/ kubeseal-convert && \
+    \
+    echo "=== DEBUG: Downloading kubeseal ===" && \
+    SEAL_URL="https://github.com/bitnami-labs/sealed-secrets/releases/download/v${KUBESEAL_VERSION}/kubeseal-${KUBESEAL_VERSION}-linux-${ARCH}.tar.gz" && \
+    echo "=== DEBUG: URL is ${SEAL_URL} ===" && \
+    curl -fL "${SEAL_URL}" -o /tmp/kubeseal.tar.gz && \
+    \
+    echo "=== DEBUG: Extracting kubeseal ===" && \
+    tar -xzf /tmp/kubeseal.tar.gz -C /usr/local/bin/ kubeseal && \
+    \
+    echo "=== DEBUG: Setting permissions and cleaning up ===" && \
+    chmod +x /usr/local/bin/kubeseal /usr/local/bin/kubeseal-convert && \
+    rm -f /tmp/kubeseal-convert.tar.gz /tmp/kubeseal.tar.gz && \
+    echo "=== DEBUG: Kubeseal installation completed successfully! ==="
 # Install k3d
 RUN wget -q -O - https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash 
     # && \
