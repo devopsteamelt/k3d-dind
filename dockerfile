@@ -30,12 +30,14 @@ RUN apk add --no-cache \
 # Install kubeseal and kubeseal-convert manually from GitHub releases
 # Install kubeseal and kubeseal-convert manually from GitHub releases
 # Install Kubernetes tooling: kubeseal, k9s, argocd, stern, kustomize, kubectx/kubens
+# Install Kubernetes tooling: kubeseal, k9s, argocd, stern, kustomize, kubectx/kubens
 RUN KUBESEAL_VERSION="0.26.0" && \
     K9S_VERSION="0.32.5" && \
     ARGOCD_VERSION="2.13.1" && \
     STERN_VERSION="1.31.0" && \
     KUBECTX_VERSION="0.9.5" && \
     ARCH=$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/') && \
+    ARCH_RAW=$(uname -m) && \
     \
     # 1. kubeseal (Bitnami Sealed Secrets)
     curl -fL "https://github.com/bitnami-labs/sealed-secrets/releases/download/v${KUBESEAL_VERSION}/kubeseal-${KUBESEAL_VERSION}-linux-${ARCH}.tar.gz" -o /tmp/kubeseal.tar.gz && \
@@ -55,10 +57,10 @@ RUN KUBESEAL_VERSION="0.26.0" && \
     # 5. kustomize
     curl -fsSL "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash -s -- /usr/local/bin && \
     \
-    # 6. kubectx + kubens
-    curl -fL "https://github.com/ahmetb/kubectx/releases/download/v${KUBECTX_VERSION}/kubectx_v${KUBECTX_VERSION}_linux_${ARCH}.tar.gz" -o /tmp/kubectx.tar.gz && \
+    # 6. kubectx + kubens (uses x86_64/arm64, not amd64/arm64)
+    curl -fL "https://github.com/ahmetb/kubectx/releases/download/v${KUBECTX_VERSION}/kubectx_v${KUBECTX_VERSION}_linux_${ARCH_RAW}.tar.gz" -o /tmp/kubectx.tar.gz && \
     tar -xzf /tmp/kubectx.tar.gz -C /usr/local/bin/ kubectx && \
-    curl -fL "https://github.com/ahmetb/kubectx/releases/download/v${KUBECTX_VERSION}/kubens_v${KUBECTX_VERSION}_linux_${ARCH}.tar.gz" -o /tmp/kubens.tar.gz && \
+    curl -fL "https://github.com/ahmetb/kubectx/releases/download/v${KUBECTX_VERSION}/kubens_v${KUBECTX_VERSION}_linux_${ARCH_RAW}.tar.gz" -o /tmp/kubens.tar.gz && \
     tar -xzf /tmp/kubens.tar.gz -C /usr/local/bin/ kubens && \
     \
     # 7. Permissions + cleanup
@@ -74,6 +76,7 @@ RUN KUBESEAL_VERSION="0.26.0" && \
     /tmp/stern.tar.gz \
     /tmp/kubectx.tar.gz \
     /tmp/kubens.tar.gz
+
 
 # Install k3d
 RUN wget -q -O - https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash 
