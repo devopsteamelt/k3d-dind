@@ -13,6 +13,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag k3d-dind:$(date +%s)
+        - name: Checkout code
+          uses: actions/checkout@v4
+    
+        # צעד חדש: מייצר תאריך ושעה בפורמט נורמלי ושומר אותו בתוך ה-Env
+        - name: Set dynamic tag
+          id: vars
+          run: echo "TAG_DATE=$(date +'%Y%m%d-%H%M')" >> $GITHUB_ENV
+    
+        - name: Build the Docker image
+          run: docker build . --file Dockerfile --tag my-image-name:${{ env.TAG_DATE }}
+    
+        - name: Build Dockerfile and Push to The Hub
+          uses: beehivewarrior/docker-hub-builder@v1.0
+          with:
+            DOCKERHUB_USERNAME: ${{ secrets.DEVOPS_TEAM_USERNAME }}
+            DOCKERHUB_TOKEN: ${{ secrets.DEVOPS_TEAM_PASSWORD }}
+            BASE_TAG: 'latest'
+            # כאן אנחנו משתמשים בתג הדינמי החדש שיצרנו:
+            TAG_NAME: ${{ env.TAG_DATE }}
+            # תשנה את זה לשם המשתמש שלך ב-Docker Hub ושם הריפו שאתה רוצה
+            IMAGE_NAME: 'the_username/the_repository'
+            PLATFORMS: 'linux/amd64'
