@@ -27,6 +27,8 @@ RUN apk add --no-cache \
     zip \
     util-linux \
     jq \
+    vim \
+    nano \
     yq
 
 RUN helm plugin install https://github.com/helm-unittest/helm-unittest.git && \
