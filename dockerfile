@@ -37,9 +37,7 @@ RUN helm plugin install https://github.com/vmware-labs/distribution-tooling-for-
 RUN helm plugin install https://github.com/adamreese/helm-env
 RUN helm plugin install https://github.com/adamreese/helm-last
 RUN  helm plugin install https://github.com/adamreese/helm-local
-RUN helm plugin install https://github.com/jkroepke/helm-secrets/releases/download/v4.7.4/secrets-4.7.4.tgz 
-RUN helm plugin install https://github.com/jkroepke/helm-secrets/releases/download/v4.7.4/secrets-getter-4.7.4.tgz 
-RUN helm plugin install https://github.com/jkroepke/helm-secrets/releases/download/v4.7.4/secrets-post-renderer-4.7.4.tgz
+RUN helm plugin install https://github.com/jkroepke/helm-secrets --version v4.7.6
 RUN helm plugin install https://github.com/adamreese/helm-nuke
 RUN helm plugin install https://github.com/ContainerSolutions/helm-monitor
 RUN helm plugin install https://github.com/hypnoglow/helm-s3.git
