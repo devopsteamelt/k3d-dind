@@ -41,7 +41,7 @@ RUN helm plugin install https://github.com/jkroepke/helm-secrets --version v4.7.
 RUN helm plugin install https://github.com/adamreese/helm-nuke
 RUN helm plugin install https://github.com/ContainerSolutions/helm-monitor
 RUN helm plugin install https://github.com/hypnoglow/helm-s3.git
-RUN helm plugin install https://github.com/web-seven/helm-github.git
+# RUN helm plugin install https://github.com/web-seven/helm-github.git
 run helm plugin install https://github.com/dadav/helm-schema
 RUN helm plugin install https://github.com/salesforce/helm-starter.git
 RUN helm plugin install https://github.com/hayorov/helm-gcs.git
