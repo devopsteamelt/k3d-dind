@@ -49,7 +49,8 @@ RUN helm plugin install https://github.com/karuppiah7890/helm-schema-gen.git
 RUN helm plugin install https://github.com/datreeio/helm-datree
 RUN helm plugin install https://github.com/JovianX/helm-release-plugin
 RUN helm plugin install https://github.com/seacrew/helm-compose
-RUN helm plugin install https://github.com/meshery-extensions/helm-kanvas-snapshot
+# RUN helm plugin install https://github.com/meshery-extensions/helm-kanvas-snapshot
+
 # Install kubeseal and kubeseal-convert manually from GitHub releases
 # Install kubeseal and kubeseal-convert manually from GitHub releases
 # Install kubeseal and kubeseal-convert manually from GitHub releases
