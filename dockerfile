@@ -1,9 +1,12 @@
 # docker build -t zeevb053/k3d-dind:1.4 .
 # docker run --privileged -d -it --name k3d zeevb053/k3d-dind:1.4
 # docker exec -it k3d bash
+# Step 1: Extract the official chart-testing binary
+FROM quay.io/helmpack/chart-testing:v3.14.0 AS ct-source
 
 FROM docker:28.5-dind
 
+COPY --from=ct-source /usr/local/bin/ct /usr/local/bin/ct
 # Install base tools
 RUN apk add --no-cache \
     git \
@@ -26,6 +29,29 @@ RUN apk add --no-cache \
     jq \
     yq
 
+RUN helm plugin install https://github.com/helm-unittest/helm-unittest.git
+RUN helm plugin install https://github.com/C123R/helm-blob.git
+RUN helm plugin install https://github.com/databus23/helm-diff
+RUN helm plugin install https://github.com/idsulik/helm-cel
+RUN helm plugin install https://github.com/vmware-labs/distribution-tooling-for-helm
+RUN helm plugin install https://github.com/adamreese/helm-env
+RUN helm plugin install https://github.com/adamreese/helm-last
+RUN  helm plugin install https://github.com/adamreese/helm-local
+RUN helm plugin install https://github.com/jkroepke/helm-secrets/releases/download/v4.7.4/secrets-4.7.4.tgz 
+RUN helm plugin install https://github.com/jkroepke/helm-secrets/releases/download/v4.7.4/secrets-getter-4.7.4.tgz 
+RUN helm plugin install https://github.com/jkroepke/helm-secrets/releases/download/v4.7.4/secrets-post-renderer-4.7.4.tgz
+RUN helm plugin install https://github.com/adamreese/helm-nuke
+RUN helm plugin install https://github.com/ContainerSolutions/helm-monitor
+RUN helm plugin install https://github.com/hypnoglow/helm-s3.git
+RUN helm plugin install https://github.com/web-seven/helm-github.git
+run helm plugin install https://github.com/dadav/helm-schema
+RUN helm plugin install https://github.com/salesforce/helm-starter.git
+RUN helm plugin install https://github.com/hayorov/helm-gcs.git
+RUN helm plugin install https://github.com/karuppiah7890/helm-schema-gen.git
+RUN helm plugin install https://github.com/datreeio/helm-datree
+RUN helm plugin install https://github.com/JovianX/helm-release-plugin
+RUN helm plugin install https://github.com/seacrew/helm-compose
+RUN helm plugin install https://github.com/meshery-extensions/helm-kanvas-snapshot
 # Install kubeseal and kubeseal-convert manually from GitHub releases
 # Install kubeseal and kubeseal-convert manually from GitHub releases
 # Install kubeseal and kubeseal-convert manually from GitHub releases
