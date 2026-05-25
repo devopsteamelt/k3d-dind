@@ -29,24 +29,24 @@ RUN apk add --no-cache \
     jq \
     yq
 
-RUN helm plugin install https://github.com/helm-unittest/helm-unittest.git \
-    helm plugin install https://github.com/C123R/helm-blob.git \
-    helm plugin install https://github.com/databus23/helm-diff \
-    helm plugin install https://github.com/idsulik/helm-cel \
-    helm plugin install https://github.com/vmware-labs/distribution-tooling-for-helm \
-    helm plugin install https://github.com/adamreese/helm-env \
-    helm plugin install https://github.com/adamreese/helm-last \
-    helm plugin install https://github.com/adamreese/helm-local \
-    helm plugin install https://github.com/jkroepke/helm-secrets --version v4.7.6 \
-    helm plugin install https://github.com/adamreese/helm-nuke \
-    helm plugin install https://github.com/ContainerSolutions/helm-monitor \
-    helm plugin install https://github.com/hypnoglow/helm-s3.git \
-    helm plugin install https://github.com/dadav/helm-schema \
-    helm plugin install https://github.com/salesforce/helm-starter.git \
-    helm plugin install https://github.com/hayorov/helm-gcs.git \
-    helm plugin install https://github.com/karuppiah7890/helm-schema-gen.git \
-    helm plugin install https://github.com/datreeio/helm-datree \
-    helm plugin install https://github.com/JovianX/helm-release-plugin \
+RUN helm plugin install https://github.com/helm-unittest/helm-unittest.git && \
+    helm plugin install https://github.com/C123R/helm-blob.git && \
+    helm plugin install https://github.com/databus23/helm-diff && \
+    helm plugin install https://github.com/idsulik/helm-cel && \
+    helm plugin install https://github.com/vmware-labs/distribution-tooling -for-helm && \
+    helm plugin install https://github.com/adamreese/helm-env && \
+    helm plugin install https://github.com/adamreese/helm-last && \
+    helm plugin install https://github.com/adamreese/helm-local && \
+    helm plugin install https://github.com/jkroepke/helm-secrets --version v4.7.6 && \
+    helm plugin install https://github.com/adamreese/helm-nuke && \
+    helm plugin install https://github.com/ContainerSolutions/helm-monitor && \
+    helm plugin install https://github.com/hypnoglow/helm-s3.git && \
+    helm plugin install https://github.com/dadav/helm-schema && \
+    helm plugin install https://github.com/salesforce/helm-starter.git && \
+    helm plugin install https://github.com/hayorov/helm-gcs.git && \
+    helm plugin install https://github.com/karuppiah7890/helm-schema-gen.git && \
+    helm plugin install https://github.com/datreeio/helm-datree && \
+    helm plugin install https://github.com/JovianX/helm-release-plugin && \
     helm plugin install https://github.com/seacrew/helm-compose 
 
 # Install kubeseal and kubeseal-convert manually from GitHub releases
