@@ -33,7 +33,7 @@ RUN helm plugin install https://github.com/helm-unittest/helm-unittest.git && \
     helm plugin install https://github.com/C123R/helm-blob.git && \
     helm plugin install https://github.com/databus23/helm-diff && \
     helm plugin install https://github.com/idsulik/helm-cel && \
-    helm plugin install https://github.com/vmware-labs/distribution-tooling -for-helm && \
+    helm plugin install https://github.com/vmware-labs/distribution-tooling-for-helm && \
     helm plugin install https://github.com/adamreese/helm-env && \
     helm plugin install https://github.com/adamreese/helm-last && \
     helm plugin install https://github.com/adamreese/helm-local && \
@@ -47,8 +47,7 @@ RUN helm plugin install https://github.com/helm-unittest/helm-unittest.git && \
     helm plugin install https://github.com/karuppiah7890/helm-schema-gen.git && \
     helm plugin install https://github.com/datreeio/helm-datree && \
     helm plugin install https://github.com/JovianX/helm-release-plugin && \
-    helm plugin install https://github.com/seacrew/helm-compose 
-
+    helm plugin install https://github.com/seacrew/helm-compose
 # Install kubeseal and kubeseal-convert manually from GitHub releases
 # Install kubeseal and kubeseal-convert manually from GitHub releases
 # Install kubeseal and kubeseal-convert manually from GitHub releases
